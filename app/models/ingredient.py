@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float
-from db import Base
+from db import Base, session
 
 
 class Ingredient(Base):
@@ -8,3 +8,7 @@ class Ingredient(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     calories = Column(Float)
+
+    @classmethod
+    def truncate(cls):
+        session.query(Ingredient).delete()
