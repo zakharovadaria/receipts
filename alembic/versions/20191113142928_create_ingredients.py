@@ -1,8 +1,8 @@
-"""create-ingredients
+"""create_ingredients
 
-Revision ID: 20191031165614
+Revision ID: 20191113142928
 Revises: 
-Create Date: 2019-10-31 16:56:15.359607
+Create Date: 2019-11-13 14:29:29.434582
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '20191031165614'
+revision = '20191113142928'
 down_revision = None
 branch_labels = None
 depends_on = None

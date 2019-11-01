@@ -28,8 +28,6 @@ def test_get(test_client):
     session.add(ingredient)
     session.commit()
 
-    ingredient = session.query(Ingredient).one()
-
     response = test_client.get('/api/v1/ingredients/')
     actual = response.json['result'][0]
     expected = IngredientClientSchema().dump(ingredient)
@@ -41,8 +39,6 @@ def test_show(test_client):
     ingredient = Ingredient(name='Name', calories=200)
     session.add(ingredient)
     session.commit()
-
-    ingredient = session.query(Ingredient).one()
 
     response = test_client.get(f"/api/v1/ingredients/{ingredient.id}")
     actual = response.json['result']
@@ -57,6 +53,7 @@ def test_create(test_client):
         "calories": 200,
     })
     response = test_client.post('/api/v1/ingredients/', json=data)
+
     actual = response.json['result']
     expected = IngredientClientSchema().dump(session.query(Ingredient).one())
 
@@ -68,13 +65,12 @@ def test_update(test_client):
     session.add(ingredient)
     session.commit()
 
-    ingredient = session.query(Ingredient).one()
-
     data = ({
         "name": "Name111",
         "calories": 2001,
     })
     response = test_client.put(f"/api/v1/ingredients/{ingredient.id}", json=data)
+
     actual = response.json['result']
     expected = IngredientClientSchema().dump(ingredient)
 
@@ -85,8 +81,6 @@ def test_delete(test_client):
     ingredient = Ingredient(name='Name', calories=200)
     session.add(ingredient)
     session.commit()
-
-    ingredient = session.query(Ingredient).one()
 
     test_client.delete(f"/api/v1/ingredients/{ingredient.id}")
     actual = session.query(Ingredient).count()

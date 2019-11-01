@@ -26,6 +26,8 @@ from db import Base
 target_metadata = Base.metadata
 
 from app.models.ingredient import Ingredient
+from app.models.receipt import Receipt
+from app.models.ingredients_receipts import IngredientsReceipts
 
 
 def run_migrations_by_env_name(env_name):
