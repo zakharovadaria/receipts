@@ -5,7 +5,7 @@ from tests.test_receipts import prepare_create_receipt
 
 
 def test_status(test_client):
-    response = test_client.get('/api/v1/receipts/')
+    response = test_client.get('/api/admin/v1/receipts/')
     actual = response.status_code
     expected = 200
 
@@ -26,7 +26,7 @@ def test_count(test_client):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get('/api/v1/receipts/')
+    response = test_client.get('/api/admin/v1/receipts/')
     actual = len(response.json['result'])
     expected = 1
 
@@ -47,7 +47,7 @@ def test_get(test_client):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get('/api/v1/receipts/')
+    response = test_client.get('/api/admin/v1/receipts/')
     actual = response.json['result'][0]
     expected = ReceiptClientSchema().dump(receipt)
 
@@ -68,7 +68,7 @@ def test_show(test_client):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get(f"/api/v1/receipts/{receipt.id}")
+    response = test_client.get(f"/api/admin/v1/receipts/{receipt.id}/")
     actual = response.json['result']
     expected = ReceiptClientSchema().dump(receipt)
 
@@ -86,8 +86,7 @@ def test_create(test_client):
         "steps": [first_step, second_step],
     })
 
-    response = test_client.post('/api/v1/receipts/', json=data)
-
+    response = test_client.post('/api/admin/v1/receipts/', json=data)
     actual = response.json['result']
     expected = ReceiptClientSchema().dump(session.query(Receipt).one())
 
@@ -116,8 +115,7 @@ def test_update(test_client):
         "steps": [first_step],
     })
 
-    response = test_client.put(f"/api/v1/receipts/{receipt.id}", json=data)
-
+    response = test_client.put(f"/api/admin/v1/receipts/{receipt.id}/", json=data)
     actual = response.json['result']
     expected = ReceiptClientSchema().dump(receipt)
 
@@ -138,7 +136,7 @@ def test_delete(test_client):
     session.add(receipt)
     session.commit()
 
-    test_client.delete(f"/api/v1/receipts/{receipt.id}")
+    test_client.delete(f"/api/admin/v1/receipts/{receipt.id}/")
     actual = session.query(Receipt).count()
     expected = 0
 

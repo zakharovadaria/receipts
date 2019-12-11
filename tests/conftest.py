@@ -4,7 +4,6 @@ from app.models.ingredient import Ingredient
 from app.models.ingredients_receipts import IngredientsReceipts
 from app.models.receipt import Receipt
 
-from app.models.ingredient import Ingredient
 from app.web import create_app
 
 
