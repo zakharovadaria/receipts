@@ -1,6 +1,7 @@
-from flask_restplus import Namespace, reqparse, Resource
+from flask_restplus import Namespace, reqparse
 
 from app.models.ingredient import Ingredient
+from app.web.controllers.api.admin.admin_resource import AdminResource
 from app.web.controllers.entities.basic_response import BasicResponse, BasicResponseSchema
 from db import session
 from schemas import IngredientClientSchema
@@ -9,7 +10,7 @@ ingredients_namespace = Namespace('ingredients', description='Ingredients CRUD')
 
 
 @ingredients_namespace.route('/', strict_slashes=True)
-class IngredientsListResource(Resource):
+class IngredientsListResource(AdminResource):
     def create_params(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, required=True)
@@ -35,7 +36,7 @@ class IngredientsListResource(Resource):
 
 
 @ingredients_namespace.route('/<int:id>/', strict_slashes=True)
-class IngredientsResource(Resource):
+class IngredientsResource(AdminResource):
     def update_params(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, store_missing=False, required=False)

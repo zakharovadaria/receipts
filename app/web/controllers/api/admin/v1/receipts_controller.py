@@ -1,7 +1,8 @@
-from flask_restplus import Namespace, reqparse, Resource
+from flask_restplus import Namespace, reqparse
 
 from app.models.ingredient import Ingredient
 from app.models.receipt import Receipt
+from app.web.controllers.api.admin.admin_resource import AdminResource
 from app.web.controllers.entities.basic_response import BasicResponse, BasicResponseSchema
 from db import session
 from schemas import ReceiptClientSchema
@@ -10,7 +11,7 @@ receipts_namespace = Namespace('receipts', description='Receipts CRUD')
 
 
 @receipts_namespace.route('/', strict_slashes=True)
-class ReceiptsListResource(Resource):
+class ReceiptsListResource(AdminResource):
     def create_params(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, required=True)
@@ -42,7 +43,7 @@ class ReceiptsListResource(Resource):
 
 
 @receipts_namespace.route('/<int:id>/', strict_slashes=True)
-class ReceiptsResource(Resource):
+class ReceiptsResource(AdminResource):
     def update_params(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, store_missing=False, required=False)
