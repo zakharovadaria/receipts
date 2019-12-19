@@ -25,6 +25,9 @@ class Config:
     BASIC_AUTH_CLIENT_NAME: str = os.environ['BASIC_AUTH_CLIENT_NAME']
     BASIC_AUTH_CLIENT_PASS: str = os.environ['BASIC_AUTH_CLIENT_PASS']
 
+    BASIC_AUTH_ADMIN_PANEL_NAME: str = os.environ['BASIC_AUTH_ADMIN_PANEL_NAME']
+    BASIC_AUTH_ADMIN_PANEL_PASS: str = os.environ['BASIC_AUTH_ADMIN_PANEL_PASS']
+
     DEBUG: bool = False
     TESTING: bool = False
 

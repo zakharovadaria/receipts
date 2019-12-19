@@ -12,6 +12,9 @@ def create_app() -> Flask:
     from app.web.controllers.api.client import api_client_v1_bp
     flask_app.register_blueprint(api_client_v1_bp)
 
+    from app.web.admin_panel import admin_panel
+    admin_panel.init_app(flask_app)
+
     return flask_app
 
 

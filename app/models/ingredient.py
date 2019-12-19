@@ -13,3 +13,6 @@ class Ingredient(Base):
     @classmethod
     def truncate(cls):
         session.query(Ingredient).delete()
+
+    def __str__(self):
+        return f'{self.name} ({self.id})'

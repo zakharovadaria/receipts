@@ -20,3 +20,6 @@ class Receipt(Base):
     @classmethod
     def truncate(cls):
         session.query(Receipt).delete()
+
+    def __str__(self):
+        return f'{self.name} ({self.id})'
