@@ -1,11 +1,11 @@
-#Run tests
+# Run tests
 
 - python -m pytest
 
-#Run migrations
+# Run migrations
 
 - alembic upgrade head
 
-#Make migration
-#####Необходимо, чтобы файл был исполняемым
+# Make migration
+##### Необходимо, чтобы файл был исполняемым
 - ./makemigration.sh -m <name-of-migration>
