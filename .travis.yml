@@ -6,6 +6,8 @@ before_script:
   - psql --command='CREATE DATABASE receipts_test;' --username=postgres
   - alembic upgrade head
 script:
-  - python -m pytest
+  - python -m pytest --cov=app/ tests/
 services:
   - postgresql
+after_success:
+  - coveralls

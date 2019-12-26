@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/zakharovadaria/receipts.svg?branch=master)](https://travis-ci.com/zakharovadaria/receipts)
+[![Coverage Status](https://coveralls.io/repos/github/zakharovadaria/receipts/badge.svg?branch=master)](https://coveralls.io/github/zakharovadaria/receipts?branch=master)
 
 # Run tests
 
