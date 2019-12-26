@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/zakharovadaria/receipts.svg?branch=master)](https://travis-ci.com/zakharovadaria/receipts)
+
 # Run tests
 
 - python -m pytest

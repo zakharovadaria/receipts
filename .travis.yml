@@ -1,0 +1,11 @@
+language: python
+install:
+  - pip install -r requirements.txt
+before_script:
+  - psql --command='CREATE DATABASE receipts_development;' --username=postgres
+  - psql --command='CREATE DATABASE receipts_test;' --username=postgres
+  - alembic upgrade head
+script:
+  - python -m pytest
+services:
+  - postgresql
