@@ -28,6 +28,8 @@ class Config:
     BASIC_AUTH_ADMIN_PANEL_NAME: str = os.environ['BASIC_AUTH_ADMIN_PANEL_NAME']
     BASIC_AUTH_ADMIN_PANEL_PASS: str = os.environ['BASIC_AUTH_ADMIN_PANEL_PASS']
 
+    JWT_SECRET_KEY: str = os.environ['JWT_SECRET_KEY']
+
     DEBUG: bool = False
     TESTING: bool = False
 

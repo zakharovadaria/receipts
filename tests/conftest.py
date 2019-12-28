@@ -5,6 +5,7 @@ import pytest
 from app.models.ingredient import Ingredient
 from app.models.ingredients_receipts import IngredientsReceipts
 from app.models.receipt import Receipt
+from app.models.user import User
 
 from app.web import create_app
 from config import CONFIG
@@ -15,6 +16,7 @@ def execute_before_any_test():
     IngredientsReceipts.truncate()
     Receipt.truncate()
     Ingredient.truncate()
+    User.truncate()
 
 
 @pytest.fixture()
