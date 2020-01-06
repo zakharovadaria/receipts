@@ -4,14 +4,14 @@ from db import session
 
 
 def test_status_without_auth(test_client):
-    response = test_client.post('/api/client/v1/login/')
+    response = test_client.post('/api/admin/v1/login/')
     actual = response.status_code
     expected = 401
 
     assert actual == expected
 
 
-def test_login(test_client, client_key):
+def test_login(test_client, admin_key):
     email = 'test@test.com'
     password = 'pass'
 
@@ -21,7 +21,7 @@ def test_login(test_client, client_key):
     user = User(
         email=email,
         password=hash_password,
-        role='client'
+        role='admin'
     )
 
     session.add(user)
@@ -32,7 +32,7 @@ def test_login(test_client, client_key):
         "password": password,
     }
 
-    response = test_client.post('/api/client/v1/login/', json=data, headers={'Authorization': f'Basic {client_key}'})
+    response = test_client.post('/api/admin/v1/login/', json=data, headers={'Authorization': f'Basic {admin_key}'})
 
     actual = response.status_code
     expected = 200

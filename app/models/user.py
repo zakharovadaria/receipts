@@ -8,8 +8,9 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String, primary_key=True, unique=True)
-    password = Column(String)
+    password = Column(String, nullable=False)
     authenticated = Column(Boolean, default=False)
+    role = Column(String, nullable=False)
 
     @classmethod
     def truncate(cls):
