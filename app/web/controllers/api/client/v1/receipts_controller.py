@@ -13,7 +13,7 @@ receipts_namespace = Namespace('receipts', description='Receipts')
 class ReceiptsListResource(Resource):
     method_decorators = [jwt_required]
 
-    def get(self):
+    def get(self) -> dict:
         receipts = session.query(Receipt).all()
         receipts = ReceiptClientSchema().dump(receipts, many=True)
         response = BasicResponse(receipts)
@@ -24,7 +24,7 @@ class ReceiptsListResource(Resource):
 class ReceiptsResource(Resource):
     method_decorators = [jwt_required]
 
-    def get(self, id):
+    def get(self, id: int) -> dict:
         receipt = session.query(Receipt).get(id)
         receipt = ReceiptClientSchema().dump(receipt)
         response = BasicResponse(receipt)

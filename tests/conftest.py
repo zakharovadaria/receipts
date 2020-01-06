@@ -1,6 +1,8 @@
 import base64
 
 import pytest
+from flask import Flask
+from flask.testing import FlaskClient
 
 from app.models.ingredient import Ingredient
 from app.models.ingredients_receipts import IngredientsReceipts
@@ -22,13 +24,13 @@ def execute_before_any_test():
 
 
 @pytest.fixture()
-def app():
+def app() -> Flask:
     app = create_app()
     return app
 
 
 @pytest.fixture()
-def test_client(app):
+def test_client(app: Flask) -> FlaskClient:
     return app.test_client()
 
 
@@ -65,21 +67,21 @@ def get_headers(access_token: str, token_type: str) -> dict:
 
 
 @pytest.fixture()
-def client():
+def client() -> User:
     user = create_user('client')
 
     return user
 
 
 @pytest.fixture()
-def admin():
+def admin() -> User:
     user = create_user('admin')
 
     return user
 
 
 @pytest.fixture()
-def admin_headers(test_client, admin):
+def admin_headers(test_client: FlaskClient, admin: User) -> dict:
     data = {
         "email": admin.email,
         "password": get_password()
@@ -94,7 +96,7 @@ def admin_headers(test_client, admin):
 
 
 @pytest.fixture()
-def client_headers(test_client, client):
+def client_headers(test_client: FlaskClient, client: User) -> dict:
     data = {
         "email": client.email,
         "password": get_password()
@@ -109,7 +111,7 @@ def client_headers(test_client, client):
 
 
 @pytest.fixture()
-def admin_panel_headers():
+def admin_panel_headers() -> dict:
     username = CONFIG.BASIC_AUTH_ADMIN_PANEL_NAME
     password = CONFIG.BASIC_AUTH_ADMIN_PANEL_PASS
     token = f'{username}:{password}'.encode()

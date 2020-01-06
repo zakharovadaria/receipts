@@ -1,8 +1,10 @@
+from flask.testing import FlaskClient
+
 from app.models.user import User
 from db import session
 
 
-def test_login(test_client, client, user_password):
+def test_login(test_client: FlaskClient, client: User, user_password: str):
     data = {
         "email": client.email,
         "password": user_password,

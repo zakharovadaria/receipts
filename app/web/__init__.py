@@ -4,7 +4,7 @@ from config import CONFIG
 
 
 def create_app() -> Flask:
-    flask_app: Flask = Flask(__name__)
+    flask_app = Flask(__name__)
     flask_app.config.from_object(CONFIG)
 
     from app.web.controllers.api.admin import api_admin_v1_bp
@@ -25,4 +25,4 @@ def create_app() -> Flask:
     return flask_app
 
 
-app: Flask = create_app()
+app = create_app()

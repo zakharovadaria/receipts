@@ -3,7 +3,7 @@ from db import session
 from app.models.receipt import Receipt
 
 
-def prepare_create_receipt():
+def prepare_create_receipt() -> tuple:
     first_ingredient = Ingredient(name='Name', calories=200)
     session.add(first_ingredient)
 

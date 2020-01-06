@@ -1,10 +1,12 @@
+from flask.testing import FlaskClient
+
 from app.models.receipt import Receipt
 from db import session
 from schemas import ReceiptClientSchema
 from tests.test_receipts import prepare_create_receipt
 
 
-def test_status_without_auth(test_client):
+def test_status_without_auth(test_client: FlaskClient):
     response = test_client.get('/api/admin/v1/receipts/')
     actual = response.status_code
     expected = 401
@@ -12,7 +14,7 @@ def test_status_without_auth(test_client):
     assert actual == expected
 
 
-def test_status(test_client, admin_headers):
+def test_status(test_client: FlaskClient, admin_headers: dict):
     response = test_client.get('/api/admin/v1/receipts/', headers=admin_headers)
     actual = response.status_code
     expected = 200
@@ -20,7 +22,7 @@ def test_status(test_client, admin_headers):
     assert actual == expected
 
 
-def test_count(test_client, admin_headers):
+def test_count(test_client: FlaskClient, admin_headers: dict):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -41,7 +43,7 @@ def test_count(test_client, admin_headers):
     assert actual == expected
 
 
-def test_get(test_client, admin_headers):
+def test_get(test_client: FlaskClient, admin_headers: dict):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -62,7 +64,7 @@ def test_get(test_client, admin_headers):
     assert actual == expected
 
 
-def test_show(test_client, admin_headers):
+def test_show(test_client: FlaskClient, admin_headers: dict):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -83,7 +85,7 @@ def test_show(test_client, admin_headers):
     assert actual == expected
 
 
-def test_create(test_client, admin_headers):
+def test_create(test_client: FlaskClient, admin_headers: dict):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     data = ({
@@ -101,7 +103,7 @@ def test_create(test_client, admin_headers):
     assert actual == expected
 
 
-def test_update(test_client, admin_headers):
+def test_update(test_client: FlaskClient, admin_headers: dict):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -130,7 +132,7 @@ def test_update(test_client, admin_headers):
     assert actual == expected
 
 
-def test_delete(test_client, admin_headers):
+def test_delete(test_client: FlaskClient, admin_headers: dict):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(

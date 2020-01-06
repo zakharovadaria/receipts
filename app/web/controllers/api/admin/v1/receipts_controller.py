@@ -14,7 +14,7 @@ receipts_namespace = Namespace('receipts', description='Receipts CRUD')
 class ReceiptsListResource(Resource):
     method_decorators = [jwt_required]
 
-    def create_params(self):
+    def create_params(self) -> dict:
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, required=True)
         parser.add_argument('description', type=str, required=False, default='')
@@ -23,13 +23,13 @@ class ReceiptsListResource(Resource):
         parser.add_argument('steps', type=str, action='append', required=False, default=None)
         return parser.parse_args()
 
-    def get(self):
+    def get(self) -> dict:
         receipts = session.query(Receipt).all()
         receipts = ReceiptClientSchema().dump(receipts, many=True)
         response = BasicResponse(receipts)
         return BasicResponseSchema().dump(response)
 
-    def post(self):
+    def post(self) -> dict:
         create_params = self.create_params()
         create_params["ingredients"] = session.query(Ingredient).filter(Ingredient.id.in_(create_params["ingredients"])).all()
         receipt = Receipt(**create_params)
@@ -48,7 +48,7 @@ class ReceiptsListResource(Resource):
 class ReceiptsResource(Resource):
     method_decorators = [jwt_required]
 
-    def update_params(self):
+    def update_params(self) -> dict:
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, store_missing=False, required=False)
         parser.add_argument('description', type=str, store_missing=False, required=False)
@@ -57,13 +57,13 @@ class ReceiptsResource(Resource):
         parser.add_argument('steps', type=str, store_missing=False, action='append', required=False)
         return parser.parse_args()
 
-    def get(self, id):
+    def get(self, id: int) -> dict:
         receipt = session.query(Receipt).get(id)
         receipt = ReceiptClientSchema().dump(receipt)
         response = BasicResponse(receipt)
         return BasicResponseSchema().dump(response)
 
-    def put(self, id):
+    def put(self, id: int) -> dict:
         receipt = session.query(Receipt).get(id)
 
         update_params = self.update_params()
@@ -79,7 +79,7 @@ class ReceiptsResource(Resource):
         response = BasicResponse(receipt)
         return BasicResponseSchema().dump(response)
 
-    def delete(self, id):
+    def delete(self, id: int) -> dict:
         receipt = session.query(Receipt).get(id)
         session.delete(receipt)
         session.commit()

@@ -1,9 +1,10 @@
+from flask.testing import FlaskClient
+
 from app.models.user import User
-from app.web.bcrypt import bcrypt
 from db import session
 
 
-def test_login(test_client, admin: User, user_password: str):
+def test_login(test_client: FlaskClient, admin: User, user_password: str):
     data = {
         "email": admin.email,
         "password": user_password,

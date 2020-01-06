@@ -1,9 +1,11 @@
+from flask.testing import FlaskClient
+
 from app.models.ingredient import Ingredient
 from db import session
 from schemas import IngredientClientSchema
 
 
-def test_status_without_auth(test_client):
+def test_status_without_auth(test_client: FlaskClient):
     response = test_client.get('/api/admin/v1/ingredients/')
     actual = response.status_code
     expected = 401
@@ -11,7 +13,7 @@ def test_status_without_auth(test_client):
     assert actual == expected
 
 
-def test_status(test_client, admin_headers):
+def test_status(test_client: FlaskClient, admin_headers: dict):
     response = test_client.get('/api/admin/v1/ingredients/', headers=admin_headers)
     actual = response.status_code
     expected = 200
@@ -19,7 +21,7 @@ def test_status(test_client, admin_headers):
     assert actual == expected
 
 
-def test_count(test_client, admin_headers):
+def test_count(test_client: FlaskClient, admin_headers: dict):
     ingredient = Ingredient(name='Name', calories=200)
     session.add(ingredient)
     session.commit()
@@ -31,7 +33,7 @@ def test_count(test_client, admin_headers):
     assert actual == expected
 
 
-def test_get(test_client, admin_headers):
+def test_get(test_client: FlaskClient, admin_headers: dict):
     ingredient = Ingredient(name='Name', calories=200)
     session.add(ingredient)
     session.commit()
@@ -43,7 +45,7 @@ def test_get(test_client, admin_headers):
     assert actual == expected
 
 
-def test_show(test_client, admin_headers):
+def test_show(test_client: FlaskClient, admin_headers: dict):
     ingredient = Ingredient(name='Name', calories=200)
     session.add(ingredient)
     session.commit()
@@ -55,7 +57,7 @@ def test_show(test_client, admin_headers):
     assert actual == expected
 
 
-def test_create(test_client, admin_headers):
+def test_create(test_client: FlaskClient, admin_headers: dict):
     data = ({
         "name": "Name",
         "calories": 200,
@@ -68,7 +70,7 @@ def test_create(test_client, admin_headers):
     assert actual == expected
 
 
-def test_update(test_client, admin_headers):
+def test_update(test_client: FlaskClient, admin_headers: dict):
     ingredient = Ingredient(name='Name', calories=200)
     session.add(ingredient)
     session.commit()
@@ -85,7 +87,7 @@ def test_update(test_client, admin_headers):
     assert actual == expected
 
 
-def test_delete(test_client, admin_headers):
+def test_delete(test_client: FlaskClient, admin_headers: dict):
     ingredient = Ingredient(name='Name', calories=200)
     session.add(ingredient)
     session.commit()

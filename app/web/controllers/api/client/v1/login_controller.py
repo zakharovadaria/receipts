@@ -11,13 +11,13 @@ login_namespace = Namespace('login', description='Login')
 
 @login_namespace.route('/', strict_slashes=True)
 class LoginResource(Resource):
-    def params(self):
+    def params(self) -> dict:
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, required=True)
         parser.add_argument('password', type=str, required=True)
         return parser.parse_args()
 
-    def post(self):
+    def post(self) -> dict:
         user_params = self.params()
         user = session.query(User).filter(User.email == user_params['email']).first()
         password = user.password.encode()
