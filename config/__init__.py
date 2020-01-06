@@ -19,12 +19,6 @@ def get_env_name() -> str:
 class Config:
     DATABASE_URL: str = os.environ['DATABASE_URL']
 
-    BASIC_AUTH_ADMIN_NAME: str = os.environ['BASIC_AUTH_ADMIN_NAME']
-    BASIC_AUTH_ADMIN_PASS: str = os.environ['BASIC_AUTH_ADMIN_PASS']
-
-    BASIC_AUTH_CLIENT_NAME: str = os.environ['BASIC_AUTH_CLIENT_NAME']
-    BASIC_AUTH_CLIENT_PASS: str = os.environ['BASIC_AUTH_CLIENT_PASS']
-
     BASIC_AUTH_ADMIN_PANEL_NAME: str = os.environ['BASIC_AUTH_ADMIN_PANEL_NAME']
     BASIC_AUTH_ADMIN_PANEL_PASS: str = os.environ['BASIC_AUTH_ADMIN_PANEL_PASS']
 

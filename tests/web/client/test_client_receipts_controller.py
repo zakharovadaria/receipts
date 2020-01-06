@@ -12,15 +12,15 @@ def test_status_without_auth(test_client):
     assert actual == expected
 
 
-def test_status(test_client, client_key):
-    response = test_client.get('/api/client/v1/receipts/', headers={'Authorization': f'Basic {client_key}'})
+def test_status(test_client, client_headers):
+    response = test_client.get('/api/client/v1/receipts/', headers=client_headers)
     actual = response.status_code
     expected = 200
 
     assert actual == expected
 
 
-def test_count(test_client, client_key):
+def test_count(test_client, client_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -34,14 +34,14 @@ def test_count(test_client, client_key):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get('/api/client/v1/receipts/', headers={'Authorization': f'Basic {client_key}'})
+    response = test_client.get('/api/client/v1/receipts/', headers=client_headers)
     actual = len(response.json['result'])
     expected = 1
 
     assert actual == expected
 
 
-def test_get(test_client, client_key):
+def test_get(test_client, client_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -55,14 +55,14 @@ def test_get(test_client, client_key):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get('/api/client/v1/receipts/', headers={'Authorization': f'Basic {client_key}'})
+    response = test_client.get('/api/client/v1/receipts/', headers=client_headers)
     actual = response.json['result'][0]
     expected = ReceiptClientSchema().dump(receipt)
 
     assert actual == expected
 
 
-def test_show(test_client, client_key):
+def test_show(test_client, client_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -76,7 +76,7 @@ def test_show(test_client, client_key):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get(f"/api/client/v1/receipts/{receipt.id}/", headers={'Authorization': f'Basic {client_key}'})
+    response = test_client.get(f"/api/client/v1/receipts/{receipt.id}/", headers=client_headers)
     actual = response.json['result']
     expected = ReceiptClientSchema().dump(receipt)
 

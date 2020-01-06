@@ -12,15 +12,15 @@ def test_status_without_auth(test_client):
     assert actual == expected
 
 
-def test_status(test_client, admin_key):
-    response = test_client.get('/api/admin/v1/receipts/', headers={'Authorization': f'Basic {admin_key}'})
+def test_status(test_client, admin_headers):
+    response = test_client.get('/api/admin/v1/receipts/', headers=admin_headers)
     actual = response.status_code
     expected = 200
 
     assert actual == expected
 
 
-def test_count(test_client, admin_key):
+def test_count(test_client, admin_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -34,14 +34,14 @@ def test_count(test_client, admin_key):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get('/api/admin/v1/receipts/', headers={'Authorization': f'Basic {admin_key}'})
+    response = test_client.get('/api/admin/v1/receipts/', headers=admin_headers)
     actual = len(response.json['result'])
     expected = 1
 
     assert actual == expected
 
 
-def test_get(test_client, admin_key):
+def test_get(test_client, admin_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -55,14 +55,14 @@ def test_get(test_client, admin_key):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get('/api/admin/v1/receipts/', headers={'Authorization': f'Basic {admin_key}'})
+    response = test_client.get('/api/admin/v1/receipts/', headers=admin_headers)
     actual = response.json['result'][0]
     expected = ReceiptClientSchema().dump(receipt)
 
     assert actual == expected
 
 
-def test_show(test_client, admin_key):
+def test_show(test_client, admin_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -76,14 +76,14 @@ def test_show(test_client, admin_key):
     session.add(receipt)
     session.commit()
 
-    response = test_client.get(f"/api/admin/v1/receipts/{receipt.id}/", headers={'Authorization': f'Basic {admin_key}'})
+    response = test_client.get(f"/api/admin/v1/receipts/{receipt.id}/", headers=admin_headers)
     actual = response.json['result']
     expected = ReceiptClientSchema().dump(receipt)
 
     assert actual == expected
 
 
-def test_create(test_client, admin_key):
+def test_create(test_client, admin_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     data = ({
@@ -94,14 +94,14 @@ def test_create(test_client, admin_key):
         "steps": [first_step, second_step],
     })
 
-    response = test_client.post('/api/admin/v1/receipts/', json=data, headers={'Authorization': f'Basic {admin_key}'})
+    response = test_client.post('/api/admin/v1/receipts/', json=data, headers=admin_headers)
     actual = response.json['result']
     expected = ReceiptClientSchema().dump(session.query(Receipt).one())
 
     assert actual == expected
 
 
-def test_update(test_client, admin_key):
+def test_update(test_client, admin_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -123,14 +123,14 @@ def test_update(test_client, admin_key):
         "steps": [first_step],
     })
 
-    response = test_client.put(f"/api/admin/v1/receipts/{receipt.id}/", json=data, headers={'Authorization': f'Basic {admin_key}'})
+    response = test_client.put(f"/api/admin/v1/receipts/{receipt.id}/", json=data, headers=admin_headers)
     actual = response.json['result']
     expected = ReceiptClientSchema().dump(receipt)
 
     assert actual == expected
 
 
-def test_delete(test_client, admin_key):
+def test_delete(test_client, admin_headers):
     first_ingredient, second_ingredient, first_step, second_step = prepare_create_receipt()
 
     receipt = Receipt(
@@ -144,7 +144,7 @@ def test_delete(test_client, admin_key):
     session.add(receipt)
     session.commit()
 
-    test_client.delete(f"/api/admin/v1/receipts/{receipt.id}/", headers={'Authorization': f'Basic {admin_key}'})
+    test_client.delete(f"/api/admin/v1/receipts/{receipt.id}/", headers=admin_headers)
     actual = session.query(Receipt).count()
     expected = 0
 

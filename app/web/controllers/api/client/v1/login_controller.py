@@ -1,9 +1,8 @@
-from flask_restplus import Namespace, reqparse
+from flask_restplus import Namespace, reqparse, Resource
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 from app.models.user import User
 from app.web.bcrypt import bcrypt
-from app.web.controllers.api.client.client_resource import ClientResource
 from app.web.controllers.entities.basic_response import BasicResponse, BasicResponseSchema
 from db import session
 
@@ -11,7 +10,7 @@ login_namespace = Namespace('login', description='Login')
 
 
 @login_namespace.route('/', strict_slashes=True)
-class LoginResource(ClientResource):
+class LoginResource(Resource):
     def params(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, required=True)
