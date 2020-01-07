@@ -14,3 +14,11 @@ class ReceiptClientSchema(Schema):
     calories = fields.Float()
     ingredients = fields.Nested(IngredientClientSchema, many=True)
     steps = fields.List(fields.String())
+
+
+class UserClientSchema(Schema):
+    id = fields.Integer()
+    email = fields.String()
+    role = fields.String()
+    active = fields.Boolean()
+    authenticated = fields.Boolean()

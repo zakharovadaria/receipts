@@ -3,6 +3,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 
 from app.models.user import User
 from app.web.bcrypt import bcrypt
+from app.web.controllers.entities.basic_error import BasicError
 from app.web.controllers.entities.basic_response import BasicResponse, BasicResponseSchema
 from db import session
 
@@ -19,22 +20,26 @@ class LoginResource(Resource):
 
     def post(self) -> dict:
         user_params = self.params()
-        user = session.query(User).filter(User.email == user_params['email']).first()
-        password = user.password.encode()
+        user = session.query(User).filter(User.active).filter(User.email == user_params['email']).first()
 
-        if bcrypt.check_password_hash(password, user_params['password']):
-            user.authenticated = True
-            session.commit()
+        if user:
+            password = user.password.encode()
 
-            access_token = create_access_token(user.email)
-            refresh_token = create_refresh_token(user.email)
+            if bcrypt.check_password_hash(password, user_params['password']):
+                user.authenticated = True
+                session.commit()
 
-            response = {
-                "access_token": access_token,
-                "refresh_token": refresh_token,
-            }
+                access_token = create_access_token(user.email)
+                refresh_token = create_refresh_token(user.email)
 
-            response = BasicResponse(response)
-            return BasicResponseSchema().dump(response)
+                response = {
+                    "access_token": access_token,
+                    "refresh_token": refresh_token,
+                }
 
+                response = BasicResponse(response)
+                return BasicResponseSchema().dump(response)
+            else:
+                raise BasicError(message='Wrong password.', status=400)
 
+        raise BasicError(message='User not found.', status=400)

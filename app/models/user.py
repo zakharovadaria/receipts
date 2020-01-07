@@ -7,10 +7,11 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String, primary_key=True, unique=True)
+    email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     authenticated = Column(Boolean, default=False)
     role = Column(String, nullable=False)
+    active = Column(Boolean, default=True)
 
     @classmethod
     def truncate(cls):
