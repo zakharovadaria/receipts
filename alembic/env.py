@@ -29,6 +29,7 @@ from app.models.ingredient import Ingredient
 from app.models.receipt import Receipt
 from app.models.ingredients_receipts import IngredientsReceipts
 from app.models.user import User
+from app.models.users_receipts import UsersReceipts
 
 
 def run_migrations_by_env_name(env_name):

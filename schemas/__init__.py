@@ -22,3 +22,4 @@ class UserClientSchema(Schema):
     role = fields.String()
     active = fields.Boolean()
     authenticated = fields.Boolean()
+    receipts = fields.Nested(ReceiptClientSchema, many=True)

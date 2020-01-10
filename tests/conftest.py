@@ -8,6 +8,7 @@ from app.models.ingredient import Ingredient
 from app.models.ingredients_receipts import IngredientsReceipts
 from app.models.receipt import Receipt
 from app.models.user import User
+from app.models.users_receipts import UsersReceipts
 
 from app.web import create_app
 from app.web.bcrypt import bcrypt
@@ -18,6 +19,7 @@ from db import session
 @pytest.fixture(scope="function", autouse=True)
 def execute_before_any_test():
     IngredientsReceipts.truncate()
+    UsersReceipts.truncate()
     Receipt.truncate()
     Ingredient.truncate()
     User.truncate()
