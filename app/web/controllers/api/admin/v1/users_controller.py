@@ -1,5 +1,5 @@
 from flask_jwt_extended import jwt_required
-from flask_restplus import Namespace, reqparse, Resource
+from flask_restplus import Namespace, reqparse, Resource, fields
 from sqlalchemy.exc import IntegrityError
 
 from app.models.user import User
@@ -11,8 +11,19 @@ from schemas import UserClientSchema
 
 users_namespace = Namespace('users', description='Users CRUD')
 
+users_fields = users_namespace.model('User', {
+    'email': fields.String(example='admin@example.com'),
+    'password': fields.String(example='pass'),
+    'role': fields.String(example='admin'),
+    'active': fields.Boolean(example=True),
+})
+
+auth_parser = users_namespace.parser()
+auth_parser.add_argument('Authorization', location='headers', help='Bearer token')
+
 
 @users_namespace.route('/', strict_slashes=True)
+@users_namespace.expect(auth_parser, validate=True)
 class UsersListResource(Resource):
     method_decorators = [jwt_required]
 
@@ -30,6 +41,8 @@ class UsersListResource(Resource):
         response = BasicResponse(users)
         return BasicResponseSchema().dump(response)
 
+    @users_namespace.doc(model=users_fields)
+    @users_namespace.expect(users_fields, validate=True)
     def post(self) -> dict:
         create_params = self.create_params()
 
@@ -53,6 +66,8 @@ class UsersListResource(Resource):
 
 
 @users_namespace.route('/<int:id>/', strict_slashes=True)
+@users_namespace.doc(params={'id': 'Ingredient ID'})
+@users_namespace.expect(auth_parser, validate=True)
 class UsersResource(Resource):
     method_decorators = [jwt_required]
 
@@ -70,6 +85,7 @@ class UsersResource(Resource):
         response = BasicResponse(user)
         return BasicResponseSchema().dump(response)
 
+    @users_namespace.expect(users_fields, validate=True)
     def put(self, id: int) -> dict:
         user = session.query(User).get(id)
 

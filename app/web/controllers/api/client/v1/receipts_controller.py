@@ -1,5 +1,5 @@
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_restplus import Namespace, Resource, reqparse
+from flask_restplus import Namespace, Resource, reqparse, fields
 
 from app.models.receipt import Receipt
 from app.models.user import User
@@ -10,8 +10,23 @@ from schemas import ReceiptClientSchema
 
 receipts_namespace = Namespace('receipts', description='Receipts')
 
+receipts_fields = receipts_namespace.model('Receipt', {
+    'name': fields.String(example='Meat'),
+    'description': fields.String(example='Long description'),
+    'ingredients': fields.List(fields.Integer(), example=[1]),
+    'calories': fields.Float(example=300.0),
+    'steps': fields.List(fields.String(), example=['step1, step2']),
+})
+
+auth_parser = receipts_namespace.parser()
+auth_parser.add_argument('Authorization', location='headers', help='Bearer token')
+
+user_parser = receipts_namespace.parser()
+user_parser.add_argument('user_id')
+
 
 @receipts_namespace.route('/', strict_slashes=True)
+@receipts_namespace.expect(auth_parser, validate=True)
 class ReceiptsListResource(Resource):
     method_decorators = [jwt_required]
 
@@ -21,6 +36,8 @@ class ReceiptsListResource(Resource):
         args = parser.parse_args()
         return args['user_id']
 
+    @receipts_namespace.doc(model=receipts_fields)
+    @receipts_namespace.expect(user_parser, validate=True)
     def get(self) -> dict:
         user_id = self.search_params()
 
@@ -38,9 +55,12 @@ class ReceiptsListResource(Resource):
 
 
 @receipts_namespace.route('/<int:id>/', strict_slashes=True)
+@receipts_namespace.expect(auth_parser, validate=True)
+@receipts_namespace.doc(params={'id': 'Receipt ID'})
 class ReceiptsResource(Resource):
     method_decorators = [jwt_required]
 
+    @receipts_namespace.doc(model=receipts_fields)
     def get(self, id: int) -> dict:
         receipt = session.query(Receipt).get(id)
         receipt = ReceiptClientSchema().dump(receipt)
@@ -49,6 +69,8 @@ class ReceiptsResource(Resource):
 
 
 @receipts_namespace.route('/<int:id>/save/', strict_slashes=True)
+@receipts_namespace.expect(auth_parser, validate=True)
+@receipts_namespace.doc(params={'id': 'Receipt ID'})
 class ReceiptsSaveResource(Resource):
     method_decorators = [jwt_required]
 

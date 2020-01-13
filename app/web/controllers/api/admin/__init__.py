@@ -7,7 +7,7 @@ from app.web.controllers.api.admin.v1.receipts_controller import receipts_namesp
 from app.web.controllers.api.admin.v1.users_controller import users_namespace
 
 api_admin_v1_bp = Blueprint('Admins API', __name__, url_prefix='/api/admin/v1')
-api_admin_v1 = Api(api_admin_v1_bp, version='1.0')
+api_admin_v1 = Api(api_admin_v1_bp, version='1.0', doc='/doc/')
 
 api_admin_v1.add_namespace(ingredients_namespace)
 api_admin_v1.add_namespace(receipts_namespace)

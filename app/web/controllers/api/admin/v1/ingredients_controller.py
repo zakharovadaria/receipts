@@ -1,5 +1,5 @@
 from flask_jwt_extended import jwt_required
-from flask_restplus import Namespace, reqparse, Resource
+from flask_restplus import Namespace, reqparse, Resource, fields
 
 from app.models.ingredient import Ingredient
 from app.web.controllers.entities.basic_response import BasicResponse, BasicResponseSchema
@@ -8,8 +8,17 @@ from schemas import IngredientClientSchema
 
 ingredients_namespace = Namespace('ingredients', description='Ingredients CRUD')
 
+ingredients_fields = ingredients_namespace.model('Ingredient', {
+    'name': fields.String(example='Egg'),
+    'calories': fields.Float(example=200.0),
+})
+
+auth_parser = ingredients_namespace.parser()
+auth_parser.add_argument('Authorization', location='headers', help='Bearer token')
+
 
 @ingredients_namespace.route('/', strict_slashes=True)
+@ingredients_namespace.expect(auth_parser, validate=True)
 class IngredientsListResource(Resource):
     method_decorators = [jwt_required]
 
@@ -25,6 +34,8 @@ class IngredientsListResource(Resource):
         response = BasicResponse(ingredients)
         return BasicResponseSchema().dump(response)
 
+    @ingredients_namespace.doc(model=ingredients_fields)
+    @ingredients_namespace.expect(ingredients_fields, validate=True)
     def post(self) -> dict:
         create_params = self.create_params()
         ingredient = Ingredient(**create_params)
@@ -38,6 +49,8 @@ class IngredientsListResource(Resource):
 
 
 @ingredients_namespace.route('/<int:id>/', strict_slashes=True)
+@ingredients_namespace.doc(params={'id': 'Ingredient ID'})
+@ingredients_namespace.expect(auth_parser, validate=True)
 class IngredientsResource(Resource):
     method_decorators = [jwt_required]
 
@@ -47,12 +60,15 @@ class IngredientsResource(Resource):
         parser.add_argument('calories', type=float, store_missing=False, required=False)
         return parser.parse_args()
 
+    @ingredients_namespace.doc(model=ingredients_fields)
     def get(self, id: int) -> dict:
         ingredient = session.query(Ingredient).get(id)
         ingredient = IngredientClientSchema().dump(ingredient)
         response = BasicResponse(ingredient)
         return BasicResponseSchema().dump(response)
 
+    @ingredients_namespace.doc(model=ingredients_fields)
+    @ingredients_namespace.expect(ingredients_fields, validate=True)
     def put(self, id: int) -> dict:
         ingredient = session.query(Ingredient).get(id)
 

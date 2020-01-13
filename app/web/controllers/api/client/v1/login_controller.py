@@ -1,4 +1,4 @@
-from flask_restplus import Namespace, reqparse, Resource
+from flask_restplus import Namespace, reqparse, Resource, fields
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 from app.models.user import User
@@ -9,8 +9,15 @@ from db import session
 
 login_namespace = Namespace('login', description='Login')
 
+login_fields = login_namespace.model('Login', {
+    'email': fields.String(example='client@test.com'),
+    'password': fields.String(example='pass'),
+})
+
 
 @login_namespace.route('/', strict_slashes=True)
+@login_namespace.doc(model=login_fields)
+@login_namespace.expect(login_fields, validate=True)
 class LoginResource(Resource):
     def params(self) -> dict:
         parser = reqparse.RequestParser()
