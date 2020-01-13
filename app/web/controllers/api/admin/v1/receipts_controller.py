@@ -51,8 +51,6 @@ class ReceiptsListResource(Resource):
         session.add(receipt)
         session.commit()
 
-        receipt = session.query(Receipt).one()
-
         receipt = ReceiptClientSchema().dump(receipt)
         response = BasicResponse(receipt)
         return BasicResponseSchema().dump(response)
